@@ -1,0 +1,184 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+  --primary-color: #ff007f;
+  --secondary-color: #1f1f1f;
+  --background-color: #121212;
+  --text-color: #ffffff;
+  --card-color: #1e1e1e;
+  --muted-color: #999999;
+  --border-radius: 10px;
+  --transition-speed: 0.3s;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 2rem 0;
+}
+
+h1, h2, h3 {
+  color: var(--primary-color);
+  text-shadow: 0 0 10px var(--primary-color);
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+}
+a:hover {
+  color: #ff3399;
+}
+
+header, footer {
+  background-color: var(--secondary-color);
+  padding: 1rem;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(255, 0, 127, 0.1);
+}
+
+.logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+}
+
+/* Cards e seções */
+.card {
+  background-color: var(--card-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: transform var(--transition-speed);
+}
+.card:hover {
+  transform: scale(1.02);
+}
+
+/* Botões */
+.btn {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+.btn:hover {
+  background-color: #ff3399;
+  transform: scale(1.05);
+}
+.btn:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+/* Formulários */
+input, select, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #1b1b1b;
+  color: var(--text-color);
+  border: 1px solid #333;
+  border-radius: var(--border-radius);
+  margin-bottom: 1rem;
+  transition: border-color var(--transition-speed);
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Tabelas */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+}
+table th, table td {
+  border: 1px solid #333;
+  padding: 0.75rem;
+  text-align: left;
+}
+table th {
+  background-color: var(--primary-color);
+  color: white;
+}
+table td {
+  background-color: var(--card-color);
+}
+
+/* Seção de alerta */
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 0, 127, 0.1);
+  border-left: 5px solid var(--primary-color);
+  color: var(--text-color);
+}
+
+/* Animação neon */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 127, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 0, 127, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 127, 0);
+  }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  table, table thead, table tbody, table th, table td, table tr {
+    display: block;
+  }
+
+  table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    width: 45%;
+    white-space: nowrap;
+    color: var(--muted-color);
+  }
+}
