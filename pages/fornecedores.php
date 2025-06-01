@@ -1,32 +1,25 @@
 <?php
+// pages/fornecedores.php
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit;
 }
 
-require_once "../includes/db.php";
-
-// Adicionar fornecedor
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nome'])) {
-    $nome = $_POST['nome'];
-    $tipo = $_POST['tipo'];
-    $contato = $_POST['contato'];
-    $produto_principal = $_POST['produto_principal'];
-    $avaliacao = $_POST['avaliacao'];
-    $lead_time = $_POST['lead_time'];
-    $melhor_preco = $_POST['melhor_preco'];
-
-    $stmt = $pdo->prepare("INSERT INTO fornecedores (nome, tipo, contato, produto_principal, avaliacao, lead_time, melhor_preco) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    $stmt->execute([$nome, $tipo, $contato, $produto_principal, $avaliacao, $lead_time, $melhor_preco]);
-
-    header("Location: fornecedores.php");
-    exit;
-}
+require_once "../includes/db.php"; // Usa $conn
 
 // Buscar fornecedores
-$stmt = $pdo->query("SELECT * FROM fornecedores ORDER BY id DESC");
-$fornecedores = $stmt->fetchAll();
+$fornecedores = [];
+$result = $conn->query("SELECT id, nome, telefone, email, endereco FROM fornecedores ORDER BY nome ASC");
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $fornecedores[] = $row;
+    }
+    $result->free();
+} else {
+    // Tratar erro de consulta, se necessário
+    // echo "Erro ao buscar fornecedores: " . $conn->error;
+}
 
 include "../includes/header.php";
 ?>
@@ -34,70 +27,70 @@ include "../includes/header.php";
 <div class="container mt-4">
     <h2>Fornecedores</h2>
 
-    <form method="post" class="row g-3 mb-4">
-        <div class="col-md-4">
-            <input type="text" name="nome" class="form-control" placeholder="Nome" required>
+    <?php if (isset($_GET['sucesso'])): ?>
+        <div class="alert alert-success">Fornecedor salvo com sucesso!</div>
+    <?php endif; ?>
+    <?php if (isset($_GET['erro'])): ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($_GET['erro']) ?></div>
+    <?php endif; ?>
+
+    <h3 class="mt-4 mb-3">Adicionar Novo Fornecedor</h3>
+    <form action="../processa_php/processa_fornecedor.php" method="post" class="row g-3 mb-4 needs-validation" novalidate>
+        <div class="col-md-6">
+            <label for="nome" class="form-label">Nome do Fornecedor</label>
+            <input type="text" name="nome" id="nome" class="form-control" placeholder="Nome do Fornecedor" required>
+            <div class="invalid-feedback">Por favor, informe o nome.</div>
         </div>
-        <div class="col-md-2">
-            <select name="tipo" class="form-select" required>
-                <option value="" disabled selected>Tipo</option>
-                <option value="Bebidas">Bebidas</option>
-                <option value="Frutas">Frutas</option>
-                <option value="Desc.">Desc.</option>
-            </select>
+        <div class="col-md-6">
+            <label for="email" class="form-label">E-mail</label>
+            <input type="email" name="email" id="email" class="form-control" placeholder="email@exemplo.com">
+             <div class="invalid-feedback">Por favor, informe um e-mail válido.</div>
         </div>
-        <div class="col-md-3">
-            <input type="text" name="contato" class="form-control" placeholder="Contato (telefone/email)" required>
+        <div class="col-md-6">
+            <label for="telefone" class="form-label">Telefone</label>
+            <input type="text" name="telefone" id="telefone" class="form-control" placeholder="(XX) XXXXX-XXXX">
         </div>
-        <div class="col-md-3">
-            <input type="text" name="produto_principal" class="form-control" placeholder="Produto Principal" required>
+        <div class="col-md-6">
+            <label for="endereco" class="form-label">Endereço</label>
+            <input type="text" name="endereco" id="endereco" class="form-control" placeholder="Rua, Número, Bairro, Cidade">
         </div>
-        <div class="col-md-1">
-            <select name="avaliacao" class="form-select" required>
-                <option value="1">★</option>
-                <option value="2">★★</option>
-                <option value="3" selected>★★★</option>
-                <option value="4">★★★★</option>
-                <option value="5">★★★★★</option>
-            </select>
-        </div>
-        <div class="col-md-2">
-            <input type="number" min="0" name="lead_time" class="form-control" placeholder="Lead Time (dias)" required>
-        </div>
-        <div class="col-md-2">
-            <input type="number" step="0.01" min="0" name="melhor_preco" class="form-control" placeholder="Melhor Preço" required>
-        </div>
-        <div class="col-md-2">
-            <button class="btn btn-success w-100" type="submit">Adicionar</button>
+        <div class="col-12">
+            <button class="btn btn-success" type="submit">Adicionar Fornecedor</button>
         </div>
     </form>
 
+    <h3 class="mt-5 mb-3">Fornecedores Cadastrados</h3>
     <table class="table table-bordered table-striped">
         <thead class="table-primary">
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
-                <th>Tipo</th>
-                <th>Contato</th>
-                <th>Produto Principal</th>
-                <th>Avaliação</th>
-                <th>Lead Time (dias)</th>
-                <th>Melhor Preço</th>
+                <th>Telefone</th>
+                <th>E-mail</th>
+                <th>Endereço</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach($fornecedores as $f): ?>
-            <tr>
-                <td><?= $f['id'] ?></td>
-                <td><?= htmlspecialchars($f['nome']) ?></td>
-                <td><?= htmlspecialchars($f['tipo']) ?></td>
-                <td><?= htmlspecialchars($f['contato']) ?></td>
-                <td><?= htmlspecialchars($f['produto_principal']) ?></td>
-                <td><?= str_repeat("★", $f['avaliacao']) ?></td>
-                <td><?= $f['lead_time'] ?></td>
-                <td>R$ <?= number_format($f['melhor_preco'], 2, ',', '.') ?></td>
-            </tr>
-            <?php endforeach; ?>
+            <?php if (count($fornecedores) > 0): ?>
+                <?php foreach($fornecedores as $f): ?>
+                <tr>
+                    <td><?= $f['id'] ?></td>
+                    <td><?= htmlspecialchars($f['nome']) ?></td>
+                    <td><?= htmlspecialchars($f['telefone'] ?? 'N/A') ?></td>
+                    <td><?= htmlspecialchars($f['email'] ?? 'N/A') ?></td>
+                    <td><?= htmlspecialchars($f['endereco'] ?? 'N/A') ?></td>
+                    <td>
+                        <?php /* Exemplo de botões de ação
+                        <a href="editar_fornecedor.php?id=<?= $f['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
+                        <a href="excluir_fornecedor.php?id=<?= $f['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza?')">Excluir</a>
+                        */ ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="6" class="text-center">Nenhum fornecedor cadastrado.</td></tr>
+            <?php endif; ?>
         </tbody>
     </table>
 </div>

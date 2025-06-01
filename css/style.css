@@ -26,7 +26,8 @@ body {
   padding: 2rem 0;
 }
 
-h1, h2, h3 {
+/* MODIFICADO: Incluído h4 e h5 para consistência */
+h1, h2, h3, h4, h5 {
   color: var(--primary-color);
   text-shadow: 0 0 10px var(--primary-color);
 }
@@ -55,10 +56,15 @@ header, footer {
 }
 
 /* Cards e seções */
+/* MODIFICADO: Adicionado color e ajustado/comentado o padding */
 .card {
-  background-color: var(--card-color);
+  background-color: var(--card-color); /* Seu fundo escuro para o card */
+  color: var(--text-color); /* Define a cor padrão do texto dentro do card para branco */
   border-radius: var(--border-radius);
-  padding: 1.5rem;
+  /* padding: 1.5rem; */ /* Bootstrap geralmente aplica padding ao .card-body. 
+                           Ter padding aqui pode duplicar ou ser indesejado. 
+                           Se precisar de padding customizado, aplique-o ao .card-body 
+                           ou certifique-se de que este é o efeito desejado. */
   margin-bottom: 1.5rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
   transition: transform var(--transition-speed);
@@ -67,10 +73,24 @@ header, footer {
   transform: scale(1.02);
 }
 
+/* ADICIONADO: Regra específica para o título do card */
+.card .card-title {
+  color: var(--primary-color); /* Garante que os títulos dos cards usem a cor primária */
+}
+
+/* ADICIONADO: Regra específica para o texto do card (parágrafos) */
+.card .card-text {
+  color: var(--text-color); /* Garante que o texto comum dentro dos cards seja branco */
+}
+
+
 /* Botões */
 .btn {
   background-color: var(--primary-color);
-  color: white;
+  color: white; /* Esta regra faz todos os botões .btn terem texto branco. */
+                 /* Se quiser que os botões do Bootstrap usem suas cores de texto padrão, */
+                 /* você pode tornar esta regra mais específica ou removê-la */
+                 /* e estilizar botões customizados de outra forma. */
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: var(--border-radius);
@@ -120,6 +140,8 @@ table th {
 }
 table td {
   background-color: var(--card-color);
+  /* ADICIONADO: Cor do texto para células da tabela para garantir legibilidade */
+  color: var(--text-color);
 }
 
 /* Seção de alerta */
@@ -127,9 +149,9 @@ table td {
   padding: 1rem;
   margin-bottom: 1rem;
   border-radius: var(--border-radius);
-  background-color: rgba(255, 0, 127, 0.1);
+  background-color: rgba(255, 0, 127, 0.1); /* Fundo rosa translúcido */
   border-left: 5px solid var(--primary-color);
-  color: var(--text-color);
+  color: var(--text-color); /* Texto branco para alertas */
 }
 
 /* Animação neon */
@@ -159,26 +181,44 @@ table td {
     font-size: 1.5rem;
   }
 
-  .btn {
-    width: 100%;
-  }
+  /* .btn { */ /* Não precisa redefinir width: 100% aqui se não for o comportamento padrão desejado para todos os botões em mobile */
+    /* width: 100%; */ /* Descomente se quiser que todos os botões ocupem 100% da largura em telas pequenas */
+  /* } */
 
   table, table thead, table tbody, table th, table td, table tr {
     display: block;
   }
 
+  table tr {
+    border: 1px solid #444; /* Adiciona uma borda ao redor de cada "linha" no modo bloco */
+    margin-bottom: 0.5rem;
+  }
+
+  table thead {
+    display: none; /* Oculta o cabeçalho da tabela original no modo mobile */
+  }
+
   table td {
-    text-align: right;
-    padding-left: 50%;
+    display: flex; /* Para alinhar o data-label e o conteúdo */
+    justify-content: space-between; /* Espaça o label e o valor */
+    text-align: right; /* Alinha o valor à direita */
+    padding-left: 0.75rem; /* Ajusta o padding para não usar o % maluco */
     position: relative;
+    border-bottom: 1px solid #333; /* Linha separadora entre "células" */
+  }
+  table td:last-child {
+      border-bottom: none; /* Remove a borda da última "célula" da "linha" */
   }
 
   table td::before {
-    content: attr(data-label);
-    position: absolute;
-    left: 1rem;
-    width: 45%;
+    content: attr(data-label); /* Pega o valor do data-label (você precisará adicionar data-label="Nome da Coluna" nos seus <td> no HTML) */
+    /* position: absolute; */ /* Removido para usar flexbox */
+    /* left: 1rem; */
+    /* width: 45%; */
     white-space: nowrap;
     color: var(--muted-color);
+    font-weight: bold;
+    text-align: left; /* Alinha o label à esquerda */
+    padding-right: 10px; /* Espaço entre o label e o valor */
   }
 }
