@@ -1,13 +1,19 @@
 <?php
-// processa_php/processa_fornecedor.php
-session_start();
-require_once('../includes/db.php');
+session_start(); // ESSENCIAL para acessar $_SESSION['user_id']
+require_once('../includes/db.php'); //
+
+// Verifica se o usuário está logado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php?erro=" . urlencode("Você precisa estar logado para cadastrar um fornecedor."));
+    exit;
+}
+$id_usuario_logado = $_SESSION['user_id']; // Pega o ID do usuário da sessão
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nome = trim($_POST['nome'] ?? '');
-    $telefone = trim($_POST['telefone'] ?? null); // Pode ser nulo
-    $email = trim($_POST['email'] ?? null);    // Pode ser nulo
-    $endereco = trim($_POST['endereco'] ?? null); // Pode ser nulo
+    $telefone = trim($_POST['telefone'] ?? null);
+    $email = trim($_POST['email'] ?? null);
+    $endereco = trim($_POST['endereco'] ?? null);
 
     if (empty($nome)) {
         header("Location: ../pages/fornecedores.php?erro=" . urlencode("O nome do fornecedor é obrigatório."));
@@ -18,21 +24,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Os campos telefone, email, endereco podem ser NULL no banco de dados conforme o schema original
-    // Se fossem NOT NULL, precisaria de validação de empty() aqui também.
-
-    $stmt = $conn->prepare("INSERT INTO fornecedores (nome, telefone, email, endereco) VALUES (?, ?, ?, ?)");
+    // Adicionamos 'id_usuario' na query e 'i' (integer) no bind_param
+    $stmt = $conn->prepare("INSERT INTO fornecedores (nome, telefone, email, endereco, id_usuario) VALUES (?, ?, ?, ?, ?)");
     if ($stmt === false) {
-        header("Location: ../pages/fornecedores.php?erro=" . urlencode("Erro ao preparar query: " . $conn->error));
+        // Logar o erro em ambiente de produção
+        // error_log("MySQLi prepare failed for fornecedores: (" . $conn->errno . ") " . $conn->error);
+        header("Location: ../pages/fornecedores.php?erro=" . urlencode("Erro no sistema. Tente novamente. (DBP_F)"));
         exit;
     }
-    // 's' para string. Se algum campo pudesse ser realmente NULL e não string vazia, precisaria de lógica adicional
-    $stmt->bind_param("ssss", $nome, $telefone, $email, $endereco);
+    // 's' para string, 'i' para integer. Agora são 5 placeholders.
+    $stmt->bind_param("ssssi", $nome, $telefone, $email, $endereco, $id_usuario_logado);
 
     if ($stmt->execute()) {
         header("Location: ../pages/fornecedores.php?sucesso=1");
     } else {
-        header("Location: ../pages/fornecedores.php?erro=" . urlencode("Erro ao cadastrar fornecedor: " . $stmt->error));
+        // Logar o erro em ambiente de produção
+        // error_log("MySQLi execute failed for fornecedores: (" . $stmt->errno . ") " . $stmt->error);
+        header("Location: ../pages/fornecedores.php?erro=" . urlencode("Erro ao cadastrar fornecedor."));
     }
     $stmt->close();
     $conn->close();

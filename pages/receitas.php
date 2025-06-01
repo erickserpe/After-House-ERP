@@ -1,45 +1,60 @@
 <?php
-// pages/receitas.php
-session_start();
+session_start(); // ESSENCIAL
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit;
 }
+$id_usuario_logado = $_SESSION['user_id'];
 
-require_once "../includes/db.php"; // Usa $conn
+require_once "../includes/db.php"; //
 
-// Buscar receitas com custo calculado
+// Buscar receitas DO USUÁRIO LOGADO com custo calculado
 $receitas = [];
 $sqlR = "SELECT r.id, r.nome, r.margem_lucro, 
             (SELECT SUM(p.preco_compra * ri.quantidade) 
              FROM receita_ingredientes ri 
              JOIN produtos p ON ri.produto_id = p.id 
-             WHERE ri.receita_id = r.id) AS custo_total
+             WHERE ri.receita_id = r.id 
+               AND p.id_usuario = ? -- Garante que os produtos usados no cálculo são do usuário
+            ) AS custo_total
          FROM receitas r 
+         WHERE r.id_usuario = ? -- Filtro principal para receitas do usuário
          ORDER BY r.nome ASC";
-$resultR = $conn->query($sqlR);
-if ($resultR) {
-    while ($row = $resultR->fetch_assoc()) {
-        $receitas[] = $row;
+$stmtR = $conn->prepare($sqlR);
+if($stmtR){
+    // O primeiro 'i' é para p.id_usuario no subselect, o segundo 'i' é para r.id_usuario no WHERE principal.
+    $stmtR->bind_param("ii", $id_usuario_logado, $id_usuario_logado);
+    $stmtR->execute();
+    $resultR = $stmtR->get_result();
+    if ($resultR) {
+        while ($rowR = $resultR->fetch_assoc()) {
+            $receitas[] = $rowR;
+        }
     }
-    $resultR->free();
+    $stmtR->close();
 }
 
-// Buscar produtos para dropdown
-$produtos = [];
-$resultP = $conn->query("SELECT id, nome, unidade FROM produtos ORDER BY nome");
-if ($resultP) {
-    while ($row = $resultP->fetch_assoc()) {
-        $produtos[] = $row;
+
+// Buscar produtos DO USUÁRIO LOGADO para dropdown de ingredientes
+$produtos_usuario = [];
+$stmtP_usr = $conn->prepare("SELECT id, nome, unidade FROM produtos WHERE id_usuario = ? ORDER BY nome");
+if($stmtP_usr){
+    $stmtP_usr->bind_param("i", $id_usuario_logado);
+    $stmtP_usr->execute();
+    $resultP_usr = $stmtP_usr->get_result();
+    while ($rowP_usr = $resultP_usr->fetch_assoc()) {
+        $produtos_usuario[] = $rowP_usr;
     }
-    $resultP->free();
+    $stmtP_usr->close();
 }
+
+// $conn->close(); // Opcional
 
 include "../includes/header.php";
 ?>
 
 <div class="container mt-4">
-    <h2>Receitas</h2>
+    <h2>Minhas Receitas</h2>
 
     <?php if (isset($_GET['sucesso'])): ?>
         <div class="alert alert-success">Receita salva com sucesso!</div>
@@ -58,28 +73,28 @@ include "../includes/header.php";
             </div>
             <div class="col-md-3">
                 <label for="margem_lucro" class="form-label">Margem de Lucro (%)</label>
-                <input type="number" step="0.01" min="0" name="margem_lucro" id="margem_lucro" class="form-control" placeholder="Ex: 20" required>
-                <div class="invalid-feedback">Por favor, informe a margem de lucro.</div>
+                <input type="text" name="margem_lucro" id="margem_lucro" class="form-control" placeholder="Ex: 20.00" required pattern="^\d*([,.]\d{1,2})?$">
+                <div class="invalid-feedback">Informe a margem de lucro (ex: 20,00).</div>
             </div>
         </div>
         <hr>
-        <h5>Ingredientes</h5>
+        <h5>Ingredientes <small class="text-muted">(Seus produtos cadastrados)</small></h5>
         <div id="ingredientes-container">
             <div class="row g-2 align-items-center mb-2 ingrediente-item">
                 <div class="col-md-5">
                     <label class="form-label visually-hidden">Produto</label>
                     <select name="ingredientes[produto_id][]" class="form-select produto-select" required>
                         <option value="" disabled selected>Selecione o Produto</option>
-                        <?php foreach ($produtos as $p): ?>
-                            <option value="<?= $p['id'] ?>" data-unidade="<?= htmlspecialchars($p['unidade']) ?>"><?= htmlspecialchars($p['nome']) ?></option>
+                        <?php foreach ($produtos_usuario as $p_usr): ?>
+                            <option value="<?= $p_usr['id'] ?>" data-unidade="<?= htmlspecialchars($p_usr['unidade']) ?>"><?= htmlspecialchars($p_usr['nome']) ?></option>
                         <?php endforeach; ?>
                     </select>
                     <div class="invalid-feedback">Selecione um produto.</div>
                 </div>
                 <div class="col-md-3">
                      <label class="form-label visually-hidden">Quantidade</label>
-                    <input type="number" step="0.001" min="0.001" name="ingredientes[quantidade][]" class="form-control quantidade-input" placeholder="Quantidade" required>
-                    <div class="invalid-feedback">Informe a quantidade.</div>
+                    <input type="text" name="ingredientes[quantidade][]" class="form-control quantidade-input" placeholder="Quantidade" required pattern="^\d*([,.]\d{1,3})?$">
+                    <div class="invalid-feedback">Informe a quantidade (ex: 0,500).</div>
                 </div>
                 <div class="col-md-2">
                     <label class="form-label visually-hidden">Unidade</label>
@@ -99,11 +114,11 @@ include "../includes/header.php";
     <table class="table table-bordered table-striped">
         <thead class="table-primary">
             <tr>
-                <th>Nome</th>
-                <th>Custo Total Estimado (R$)</th>
-                <th>Margem Lucro (%)</th>
-                <th>Preço Venda Sugerido (R$)</th>
-                <th>Ações</th>
+                <th data-label="Nome">Nome</th>
+                <th data-label="Custo (R$)">Custo Total Estimado (R$)</th>
+                <th data-label="Margem (%)">Margem Lucro (%)</th>
+                <th data-label="Preço Venda (R$)">Preço Venda Sugerido (R$)</th>
+                <th data-label="Ações">Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -113,17 +128,17 @@ include "../includes/header.php";
                     $preco_sugerido = $custo * (1 + ($r['margem_lucro'] ?? 0) / 100);
                 ?>
                 <tr>
-                    <td><?= htmlspecialchars($r['nome']) ?></td>
-                    <td><?= number_format($custo, 2, ',', '.') ?></td>
-                    <td><?= number_format($r['margem_lucro'] ?? 0, 2, ',', '.') ?>%</td>
-                    <td><?= number_format($preco_sugerido, 2, ',', '.') ?></td>
-                    <td>
+                    <td data-label="Nome"><?= htmlspecialchars($r['nome']) ?></td>
+                    <td data-label="Custo (R$)"><?= number_format($custo, 2, ',', '.') ?></td>
+                    <td data-label="Margem (%)"><?= number_format($r['margem_lucro'] ?? 0, 2, ',', '.') ?>%</td>
+                    <td data-label="Preço Venda (R$)"><?= number_format($preco_sugerido, 2, ',', '.') ?></td>
+                    <td data-label="Ações">
                         <?php /* <a href="ver_receita.php?id=<?= $r['id'] ?>" class="btn btn-sm btn-info">Ver Detalhes</a> */ ?>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                 <tr><td colspan="5" class="text-center">Nenhuma receita cadastrada.</td></tr>
+                 <tr><td colspan="5" class="text-center">Você ainda não cadastrou nenhuma receita.</td></tr>
             <?php endif; ?>
         </tbody>
     </table>
@@ -134,8 +149,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('ingredientes-container');
     const produtoOptionsHTML = `
         <option value="" disabled selected>Selecione o Produto</option>
-        <?php foreach ($produtos as $p): ?>
-            <option value="<?= $p['id'] ?>" data-unidade="<?= htmlspecialchars($p['unidade']) ?>"><?= htmlspecialchars($p['nome']) ?></option>
+        <?php foreach ($produtos_usuario as $p_usr): // Usar a lista de produtos do usuário ?>
+            <option value="<?= $p_usr['id'] ?>" data-unidade="<?= htmlspecialchars($p_usr['unidade']) ?>"><?= htmlspecialchars($p_usr['nome']) ?></option>
         <?php endforeach; ?>
     `;
 
@@ -149,18 +164,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Atualiza unidade para a primeira linha (se houver)
     const firstSelect = container.querySelector('.produto-select');
     if (firstSelect) {
-        firstSelect.addEventListener('change', function() {
-            updateUnidade(this);
-        });
-        // Inicializa caso um valor já esteja selecionado (ex: ao voltar na página)
+        firstSelect.addEventListener('change', function() { updateUnidade(this); });
         if(firstSelect.value) updateUnidade(firstSelect);
 
         const firstRemoveButton = firstSelect.closest('.ingrediente-item').querySelector('.btn-remove-ingredient');
-        if (container.children.length <= 1) { // Se só tem um item, desabilita remover
-             if(firstRemoveButton) firstRemoveButton.disabled = true;
+        if (container.children.length <= 1 && firstRemoveButton) {
+            firstRemoveButton.disabled = true;
         }
     }
 
@@ -178,8 +189,8 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="col-md-3">
                 <label class="form-label visually-hidden">Quantidade</label>
-                <input type="number" step="0.001" min="0.001" name="ingredientes[quantidade][]" class="form-control quantidade-input" placeholder="Quantidade" required>
-                <div class="invalid-feedback">Informe a quantidade.</div>
+                <input type="text" name="ingredientes[quantidade][]" class="form-control quantidade-input" placeholder="Quantidade" required pattern="^\\d*([,.]\\d{1,3})?$">
+                <div class="invalid-feedback">Informe a quantidade (ex: 0,500).</div>
             </div>
             <div class="col-md-2">
                 <label class="form-label visually-hidden">Unidade</label>
@@ -192,21 +203,17 @@ document.addEventListener('DOMContentLoaded', function() {
         container.appendChild(newIngredientRow);
         
         const newSelect = newIngredientRow.querySelector('.produto-select');
-        newSelect.addEventListener('change', function() {
-            updateUnidade(this);
-        });
+        newSelect.addEventListener('change', function() { updateUnidade(this); });
 
-        // Habilita todos os botões de remover se houver mais de um item
         const allRemoveButtons = container.querySelectorAll('.btn-remove-ingredient');
         allRemoveButtons.forEach(btn => btn.disabled = false);
     });
 
     container.addEventListener('click', function(e) {
         if (e.target && e.target.classList.contains('btn-remove-ingredient')) {
-            if (container.children.length > 1) { // Não permite remover o último item
+            if (container.children.length > 1) { 
                 e.target.closest('.ingrediente-item').remove();
             }
-            // Se restar apenas um item, desabilita seu botão de remover
             if (container.children.length === 1) {
                 const lastRemoveButton = container.querySelector('.btn-remove-ingredient');
                 if(lastRemoveButton) lastRemoveButton.disabled = true;

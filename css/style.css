@@ -1,224 +1,411 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary-color: #ff007f;
-  --secondary-color: #1f1f1f;
-  --background-color: #121212;
-  --text-color: #ffffff;
-  --card-color: #1e1e1e;
-  --muted-color: #999999;
-  --border-radius: 10px;
-  --transition-speed: 0.3s;
+  /* Tema Claro com Laranja Neon da Logo como Destaque */
+  --primary-color: #FFA500; /* Laranja neon (ajuste o tom exato da sua logo) */
+  --primary-color-rgb: 255, 165, 0;
+  --primary-color-darker: #E59400; /* Laranja um pouco mais escuro para hovers */
+  --primary-color-lighter: #FFC04D; /* Laranja um pouco mais claro */
+  --primary-color-transparent: rgba(255, 165, 0, 0.1); /* Para fundos de hover sutis */
+
+  --background-color: #F8F9FA;    /* Cinza muito claro (Bootstrap .bg-light) */
+  --section-background-color: #FFFFFF; /* Branco para seções e cards */
+  
+  --text-color: #212529;          /* Preto suave (Bootstrap .text-dark) */
+  --text-muted-color: #6C757D;    /* Cinza médio (Bootstrap .text-muted) */
+  --heading-color: #343A40;      /* Cinza escuro para cabeçalhos */
+
+  --border-color: #DEE2E6;        /* Cinza claro para bordas */
+  --border-radius: 0.375rem;      /* Padrão Bootstrap 5 */
+  --transition-speed: 0.2s;
+
+  --box-shadow-soft: 0 .125rem .25rem rgba(0,0,0,.075);
+  --box-shadow-focus: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
+  --box-shadow-hover: 0 .5rem 1rem rgba(0,0,0,.15);
+}
+
+/* Reset e Configurações Globais */
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
-  margin: 0;
-  padding: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
 }
 
-.container {
+/* Estrutura Sticky Footer */
+.site-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  flex-grow: 1;
+}
+
+main.container {
+  flex: 1 0 auto;
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.container { /* Para outros usos de .container se necessário */
   width: 90%;
   max-width: 1200px;
-  margin: auto;
-  padding: 2rem 0;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-/* MODIFICADO: Incluído h4 e h5 para consistência */
+/* Tipografia */
 h1, h2, h3, h4, h5 {
+  color: var(--heading-color);
+  font-weight: 600;
+  margin-top: 0; /* Remover margem superior padrão dos cabeçalhos */
+  margin-bottom: 0.75rem; /* Espaçamento inferior consistente */
+}
+
+h1.display-5 { /* Título principal da página inicial */
   color: var(--primary-color);
-  text-shadow: 0 0 10px var(--primary-color);
+  font-weight: 700;
+  text-shadow: none; /* Sem sombra neon em tema claro */
+}
+
+p.lead { /* Parágrafo principal da página inicial */
+    color: var(--text-muted-color);
+    font-size: 1.15rem;
 }
 
 a {
   color: var(--primary-color);
-  text-decoration: none;
-  transition: color var(--transition-speed);
+  text-decoration: none; /* Bootstrap já remove para links de navegação, mas pode ser útil */
 }
 a:hover {
-  color: #ff3399;
+  color: var(--primary-color-darker);
+  text-decoration: underline;
 }
 
-header, footer {
-  background-color: var(--secondary-color);
-  padding: 1rem;
-  text-align: center;
-  box-shadow: 0 0 10px rgba(255, 0, 127, 0.1);
+/* Navbar */
+/* Para uma navbar clara, use as classes do Bootstrap: navbar-light bg-light ou navbar-light bg-white */
+/* Se quiser a navbar escura como contraste: */
+nav.navbar.navbar-dark.bg-dark {
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+}
+nav.navbar .navbar-brand .me-2 { /* Estilo para o ícone da logo na navbar */
+    border-radius: 50%;
+    padding: 2px;
+    /* background-color: rgba(var(--primary-color-rgb),0.1); -> Pode não ser necessário com logo escura */
+}
+
+
+/* Header (onde fica o logo grande) */
+header.text-center.py-4 {
+  background-color: var(--section-background-color); /* Fundo branco */
+  border-bottom: 1px solid var(--border-color); /* Linha sutil abaixo */
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
 }
 
 .logo {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
   color: var(--primary-color);
-  text-shadow: 0 0 10px var(--primary-color), 0 0 20px var(--primary-color);
+  text-shadow: none; /* Ou uma sombra muito sutil se desejar */
 }
 
-/* Cards e seções */
-/* MODIFICADO: Adicionado color e ajustado/comentado o padding */
+/* Cards */
 .card {
-  background-color: var(--card-color); /* Seu fundo escuro para o card */
-  color: var(--text-color); /* Define a cor padrão do texto dentro do card para branco */
+  background-color: var(--section-background-color); /* Fundo branco */
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  /* padding: 1.5rem; */ /* Bootstrap geralmente aplica padding ao .card-body. 
-                           Ter padding aqui pode duplicar ou ser indesejado. 
-                           Se precisar de padding customizado, aplique-o ao .card-body 
-                           ou certifique-se de que este é o efeito desejado. */
-  margin-bottom: 1.5rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-  transition: transform var(--transition-speed);
+  margin-bottom: 1.75rem;
+  box-shadow: var(--box-shadow-soft);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
 }
 .card:hover {
-  transform: scale(1.02);
+  transform: translateY(-3px);
+  box-shadow: var(--box-shadow-hover);
 }
-
-/* ADICIONADO: Regra específica para o título do card */
-.card .card-title {
-  color: var(--primary-color); /* Garante que os títulos dos cards usem a cor primária */
+.card .card-header { /* Estilo para cabeçalho de card, se usar */
+    background-color: #F8F9FA; /* Cinza bem claro */
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
 }
-
-/* ADICIONADO: Regra específica para o texto do card (parágrafos) */
+.card .card-body {
+    padding: 1.5rem;
+}
+.card .card-title { /* h5.card-title já herda de h5 */
+  margin-bottom: 0.75rem;
+}
 .card .card-text {
-  color: var(--text-color); /* Garante que o texto comum dentro dos cards seja branco */
+  color: var(--text-muted-color);
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
-
 
 /* Botões */
 .btn {
-  background-color: var(--primary-color);
-  color: white; /* Esta regra faz todos os botões .btn terem texto branco. */
-                 /* Se quiser que os botões do Bootstrap usem suas cores de texto padrão, */
-                 /* você pode tornar esta regra mais específica ou removê-la */
-                 /* e estilizar botões customizados de outra forma. */
-  padding: 0.75rem 1.5rem;
-  border: none;
+  padding: 0.65rem 1.5rem;
   border-radius: var(--border-radius);
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color var(--transition-speed), transform var(--transition-speed);
+  font-weight: 600;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: var(--box-shadow-soft);
 }
 .btn:hover {
-  background-color: #ff3399;
-  transform: scale(1.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,.1);
 }
+.btn:active {
+  transform: translateY(-1px);
+}
+.btn:focus {
+    box-shadow: var(--box-shadow-focus);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #FFFFFF; /* Texto branco no botão laranja primário */
+}
+.btn-primary:hover {
+    background-color: var(--primary-color-darker);
+    border-color: var(--primary-color-darker);
+    color: #FFFFFF;
+}
+
+.btn-secondary { /* Exemplo para botão secundário */
+    background-color: var(--text-muted-color);
+    border-color: var(--text-muted-color);
+    color: #FFFFFF;
+}
+.btn-secondary:hover {
+    background-color: #5A6268; /* text-muted-color mais escuro */
+    border-color: #5A6268;
+    color: #FFFFFF;
+}
+
+/* Botões Outline (herdam cores do Bootstrap, mas podemos ajustar se precisar) */
+.btn-outline-primary {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+.btn-outline-primary:hover {
+    color: #FFFFFF;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+/* ... estilos para outros botões outline se necessário ... */
+
 .btn:disabled {
-  background-color: #555;
-  cursor: not-allowed;
+  background-color: #E9ECEF; /* Cinza claro para desabilitado */
+  border-color: #E9ECEF;
+  color: var(--text-muted-color);
+  opacity: 0.65; /* Opacidade padrão Bootstrap */
 }
 
 /* Formulários */
-input, select, textarea {
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--heading-color); /* Cor de cabeçalho para labels */
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
   width: 100%;
-  padding: 0.75rem;
-  background-color: #1b1b1b;
+  padding: 0.65rem 1rem; /* Padding ligeiramente ajustado */
+  background-color: var(--section-background-color); /* Fundo branco */
   color: var(--text-color);
-  border: 1px solid #333;
+  border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   margin-bottom: 1rem;
-  transition: border-color var(--transition-speed);
+  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+  font-size: 0.95rem;
 }
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--primary-color);
+  box-shadow: var(--box-shadow-focus);
+}
+.form-control::placeholder { /* Estilo do placeholder */
+    color: var(--text-muted-color);
+    opacity: 0.7;
 }
 
-/* Tabelas */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 1.5rem;
-}
-table th, table td {
-  border: 1px solid #333;
-  padding: 0.75rem;
-  text-align: left;
-}
-table th {
-  background-color: var(--primary-color);
-  color: white;
-}
-table td {
-  background-color: var(--card-color);
-  /* ADICIONADO: Cor do texto para células da tabela para garantir legibilidade */
-  color: var(--text-color);
-}
-
-/* Seção de alerta */
-.alert {
-  padding: 1rem;
-  margin-bottom: 1rem;
+/* Tabelas (usando classes Bootstrap e customizações leves) */
+table.table {
+  background-color: var(--section-background-color); /* Fundo branco */
   border-radius: var(--border-radius);
-  background-color: rgba(255, 0, 127, 0.1); /* Fundo rosa translúcido */
-  border-left: 5px solid var(--primary-color);
-  color: var(--text-color); /* Texto branco para alertas */
+  box-shadow: var(--box-shadow-soft);
+  margin-top: 2rem;
+  border: 1px solid var(--border-color); /* Borda externa para a tabela inteira */
+}
+table.table th,
+table.table td {
+  padding: 0.9rem 1rem; /* Padding uniforme */
+  vertical-align: middle;
 }
 
-/* Animação neon */
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 0, 127, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(255, 0, 127, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 0, 127, 0);
-  }
+/* Cabeçalho da tabela - usando .table-light do Bootstrap como base ou customizando */
+table.table thead.table-light th {
+  background-color: #E9ECEF; /* Cinza bem claro Bootstrap */
+  color: var(--heading-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom-width: 2px;
+  border-color: var(--border-color);
+}
+/* Alternativa: Cabeçalho com a cor primária */
+/* table.table thead th {
+  background-color: var(--primary-color);
+  color: #FFFFFF;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom-width: 0;
+} */
+
+table.table-striped > tbody > tr:nth-of-type(odd) > * { /* Ajuste para zebrado do Bootstrap com fundo claro */
+    background-color: rgba(0,0,0,.025); /* Cor de zebrado muito sutil */
 }
 
-.pulse {
-  animation: pulse 2s infinite;
+table.table-hover > tbody > tr:hover > * {
+    background-color: var(--primary-color-transparent); /* Hover laranja sutil */
+    color: var(--text-color);
 }
 
-/* Responsivo */
+table.table td {
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+table.table td a {
+  font-weight: 500;
+}
+
+
+/* Alertas */
+.alert {
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-soft);
+}
+/* Cores de alerta padrão do Bootstrap geralmente funcionam bem em tema claro */
+/* Se quiser customizar: */
+/* .alert-primary {
+    color: #004085;
+    background-color: #cce5ff;
+    border-color: #b8daff;
+} */
+.alert-danger {
+    /* usa padrão bootstrap */
+}
+.alert-success {
+    /* usa padrão bootstrap */
+}
+
+
+/* Rodapé */
+.site-footer {
+  background-color: #E9ECEF; /* Cinza claro (Bootstrap .bg-light) */
+  color: var(--text-muted-color);
+  padding: 2.5rem 0;
+  border-top: 1px solid var(--border-color);
+  width: 100%;
+  margin-top: auto;
+  flex-shrink: 0;
+}
+.site-footer .footer-text {
+  font-size: 0.85rem;
+  margin-bottom: 0;
+}
+.site-footer .footer-highlight {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+.site-footer .footer-link {
+  color: var(--text-muted-color);
+  text-decoration: none;
+  transition: color var(--transition-speed);
+  margin: 0 0.5rem;
+}
+.site-footer .footer-link:hover {
+  color: var(--primary-color);
+}
+
+
+/* Responsividade */
 @media (max-width: 768px) {
-  .container {
-    padding: 1rem;
+  body { font-size: 0.95rem; }
+  .container, main.container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
   }
 
-  .logo {
-    font-size: 1.5rem;
+  .logo { font-size: 1.8rem; }
+  h1.display-5 { font-size: 2rem; }
+  h1 { font-size: 1.7rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.3rem; }
+
+  .card .card-body { padding: 1.25rem; }
+  .btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+
+  /* Tabela Responsiva com Data Labels */
+  table.table thead {
+    display: none;
   }
-
-  /* .btn { */ /* Não precisa redefinir width: 100% aqui se não for o comportamento padrão desejado para todos os botões em mobile */
-    /* width: 100%; */ /* Descomente se quiser que todos os botões ocupem 100% da largura em telas pequenas */
-  /* } */
-
-  table, table thead, table tbody, table th, table td, table tr {
+  table.table,
+  table.table tbody,
+  table.table tr,
+  table.table td {
     display: block;
   }
-
-  table tr {
-    border: 1px solid #444; /* Adiciona uma borda ao redor de cada "linha" no modo bloco */
-    margin-bottom: 0.5rem;
+  table.table tr {
+    background-color: var(--section-background-color); /* Fundo branco para cada "card" de linha */
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem;
+    box-shadow: var(--box-shadow-soft);
+  }
+  table.table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0.25rem;
+    text-align: right;
+    border-bottom: 1px dashed #E0E0E0; /* Linha pontilhada mais suave */
+    min-height: 38px;
+  }
+  table.table tr td:last-child {
+    border-bottom: none;
+  }
+  table.table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-muted-color); /* Cor mais suave para o label */
+    text-align: left;
+    padding-right: 10px;
+    flex-basis: 45%; /* Ajuste a largura do label */
+    flex-shrink: 0;
+    white-space: normal; /* Permite quebra de linha */
   }
 
-  table thead {
-    display: none; /* Oculta o cabeçalho da tabela original no modo mobile */
-  }
-
-  table td {
-    display: flex; /* Para alinhar o data-label e o conteúdo */
-    justify-content: space-between; /* Espaça o label e o valor */
-    text-align: right; /* Alinha o valor à direita */
-    padding-left: 0.75rem; /* Ajusta o padding para não usar o % maluco */
-    position: relative;
-    border-bottom: 1px solid #333; /* Linha separadora entre "células" */
-  }
-  table td:last-child {
-      border-bottom: none; /* Remove a borda da última "célula" da "linha" */
-  }
-
-  table td::before {
-    content: attr(data-label); /* Pega o valor do data-label (você precisará adicionar data-label="Nome da Coluna" nos seus <td> no HTML) */
-    /* position: absolute; */ /* Removido para usar flexbox */
-    /* left: 1rem; */
-    /* width: 45%; */
-    white-space: nowrap;
-    color: var(--muted-color);
-    font-weight: bold;
-    text-align: left; /* Alinha o label à esquerda */
-    padding-right: 10px; /* Espaço entre o label e o valor */
-  }
+  .site-footer { padding: 2rem 1rem; }
+  .site-footer .footer-text { font-size: 0.8rem; }
 }
