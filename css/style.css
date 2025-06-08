@@ -1,27 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
+/* Substitua o :root antigo por este */
 :root {
-  /* Tema Claro com Laranja Neon da Logo como Destaque */
-  --primary-color: #FFA500; /* Laranja neon (ajuste o tom exato da sua logo) */
+  /* Tema Noturno com Laranja Neon */
+  --primary-color: #FFA500; /* Laranja neon (permanece como destaque) */
   --primary-color-rgb: 255, 165, 0;
-  --primary-color-darker: #E59400; /* Laranja um pouco mais escuro para hovers */
-  --primary-color-lighter: #FFC04D; /* Laranja um pouco mais claro */
-  --primary-color-transparent: rgba(255, 165, 0, 0.1); /* Para fundos de hover sutis */
+  --primary-color-darker: #E59400;
+  --primary-color-lighter: #FFC04D;
+  --primary-color-transparent: rgba(255, 165, 0, 0.15); /* Opacidade um pouco maior para fundos escuros */
 
-  --background-color: #F8F9FA;    /* Cinza muito claro (Bootstrap .bg-light) */
-  --section-background-color: #FFFFFF; /* Branco para seções e cards */
+  --background-color: #121212;      /* Fundo quase preto */
+  --section-background-color: #1E1E1E; /* Cinza bem escuro para cards e inputs */
   
-  --text-color: #212529;          /* Preto suave (Bootstrap .text-dark) */
-  --text-muted-color: #6C757D;    /* Cinza médio (Bootstrap .text-muted) */
-  --heading-color: #343A40;      /* Cinza escuro para cabeçalhos */
+  --text-color: #E0E0E0;            /* Texto principal (cinza claro) */
+  --text-muted-color: #888888;      /* Texto secundário (cinza médio) */
+  --heading-color: #FFFFFF;         /* Cabeçalhos (branco) */
 
-  --border-color: #DEE2E6;        /* Cinza claro para bordas */
-  --border-radius: 0.375rem;      /* Padrão Bootstrap 5 */
+  --border-color: #333333;          /* Bordas (cinza escuro) */
+  --border-radius: 0.375rem;
   --transition-speed: 0.2s;
 
-  --box-shadow-soft: 0 .125rem .25rem rgba(0,0,0,.075);
+  /* Sombras ajustadas para o tema escuro */
+  --box-shadow-soft: 0 .125rem .25rem rgba(0,0,0,.5);
   --box-shadow-focus: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
-  --box-shadow-hover: 0 .5rem 1rem rgba(0,0,0,.15);
+  --box-shadow-hover: 0 .5rem 1rem rgba(0,0,0,.3);
 }
 
 /* Reset e Configurações Globais */
@@ -277,8 +279,9 @@ table.table thead.table-light th {
   border-bottom-width: 0;
 } */
 
-table.table-striped > tbody > tr:nth-of-type(odd) > * { /* Ajuste para zebrado do Bootstrap com fundo claro */
-    background-color: rgba(0,0,0,.025); /* Cor de zebrado muito sutil */
+/* Substitua a regra antiga de table.table-striped por esta */
+table.table-striped > tbody > tr:nth-of-type(odd) > * {
+    background-color: rgba(255, 255, 255, 0.04); /* Cor de zebrado muito sutil para fundos escuros */
 }
 
 table.table-hover > tbody > tr:hover > * {
@@ -408,4 +411,93 @@ table.table td a {
 
   .site-footer { padding: 2rem 1rem; }
   .site-footer .footer-text { font-size: 0.8rem; }
+}
+/* =================================================================
+   AJUSTES FINOS PARA O TEMA NOTURNO (Melhora de Contraste)
+   Adicione este bloco no FINAL do seu arquivo style.css
+   ================================================================= */
+
+/* Melhora a cor de texto secundário/silenciado para maior contraste */
+.text-muted {
+    color: #a0a0a0 !important; /* Usamos !important para sobrescrever o Bootstrap se necessário */
+}
+
+/* Deixa os placeholders de formulários mais visíveis */
+.form-control::placeholder {
+    color: #888;
+    opacity: 1; /* Remove a transparência para facilitar a leitura */
+}
+
+/* Corrige as cores dos alertas para o tema escuro */
+.alert-success {
+    background-color: #146c43; /* Um verde mais escuro e sóbrio */
+    color: #ffffff;
+    border-color: #198754;
+}
+
+.alert-danger {
+    background-color: #b02a37; /* Um vermelho mais escuro e sóbrio */
+    color: #ffffff;
+    border-color: #dc3545;
+}
+
+/* Garante que links dentro de alertas sejam brancos e visíveis */
+.alert a {
+    color: #ffffff;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* Melhora o contraste do botão secundário */
+.btn-secondary {
+    background-color: #495057;
+    border-color: #495057;
+    color: #FFFFFF;
+}
+.btn-secondary:hover {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Garante que o texto dentro dos cards na tela inicial (index.php) seja legível */
+.card .card-text {
+  color: var(--text-color); /* Usa a cor de texto principal do tema */
+  font-size: 0.95rem;
+}
+/* =================================================================
+   POLIMENTO FINAL DO TEMA NOTURNO
+   Adicione este bloco no FINAL do seu arquivo style.css
+   ================================================================= */
+
+/* Ajusta o cabeçalho dos cards para o fundo escuro */
+.card .card-header {
+    background-color: #2a2a2e; /* Um tom ligeiramente diferente para destacar */
+    border-bottom: 1px solid var(--border-color);
+    color: var(--heading-color);
+}
+
+/* Deixa o rodapé 100% integrado com o tema noturno */
+.site-footer {
+  background-color: #000000; /* Fundo preto para o rodapé */
+  color: var(--text-muted-color);
+  border-top: 1px solid var(--border-color);
+}
+
+/* Ajusta os botões desabilitados para o tema escuro */
+.btn:disabled {
+  background-color: #333;
+  border-color: #333;
+  color: var(--text-muted-color);
+  opacity: 0.5;
+}
+
+/* Remove a cor de fundo clara que ainda existia no cabeçalho de tabelas */
+table.table thead.table-light th {
+    background-color: transparent; /* Remove o fundo claro específico */
+}
+
+/* Deixa o fundo do corpo da tabela um pouco mais transparente para diferenciar */
+table.table {
+  background-color: rgba(30, 30, 30, 0.8); /* Fundo do card com transparência */
+  backdrop-filter: blur(5px); /* Efeito de vidro (opcional, mas moderno) */
 }

@@ -26,6 +26,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/pages/dashboard.php">Dashboard</a></li> 
           <li class="nav-item"><a class="nav-link" href="/pages/fornecedores.php">Fornecedores</a></li>
           <li class="nav-item"><a class="nav-link" href="/pages/produtos.php">Produtos</a></li>
           <li class="nav-item"><a class="nav-link" href="/pages/receitas.php">Receitas</a></li>
