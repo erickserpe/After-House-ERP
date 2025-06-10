@@ -96,4 +96,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: ../mudar_senha.php");
     exit;
 }
-?>
+?> 

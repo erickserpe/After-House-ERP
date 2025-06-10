@@ -1,32 +1,44 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-/* Substitua o :root antigo por este */
+/* ==========================================================================
+   1. DEFINIÇÕES GLOBAIS E VARIÁVEIS (A BASE DE TUDO)
+   ========================================================================== */
 :root {
-  /* Tema Noturno com Laranja Neon */
-  --primary-color: #FFA500; /* Laranja neon (permanece como destaque) */
-  --primary-color-rgb: 255, 165, 0;
-  --primary-color-darker: #E59400;
-  --primary-color-lighter: #FFC04D;
-  --primary-color-transparent: rgba(255, 165, 0, 0.15); /* Opacidade um pouco maior para fundos escuros */
+  /* Paleta de Cores Principal (Tema Dark com Laranja) */
+  --color-primary: #FFA500; /* Laranja neon */
+  --color-primary-darker: #E59400;
+  --color-primary-transparent: rgba(255, 165, 0, 0.1);
 
-  --background-color: #121212;      /* Fundo quase preto */
-  --section-background-color: #1E1E1E; /* Cinza bem escuro para cards e inputs */
-  
-  --text-color: #E0E0E0;            /* Texto principal (cinza claro) */
-  --text-muted-color: #888888;      /* Texto secundário (cinza médio) */
-  --heading-color: #FFFFFF;         /* Cabeçalhos (branco) */
+  /* Cores de Fundo (Superfícies) */
+  --surface-background: #121212; /* Fundo principal, quase preto */
+  --surface-1: #1E1E1E;         /* Superfície para cards, tabelas, etc. */
+  --surface-2: #2a2a2e;         /* Superfície para headers, inputs, etc. */
+  --surface-hover: rgba(255, 255, 255, 0.05); /* Efeito de hover sutil */
 
-  --border-color: #333333;          /* Bordas (cinza escuro) */
+  /* Cores de Texto */
+  --text-primary: #E0E0E0;       /* Cor de texto principal (cinza claro) */
+  --text-secondary: #a0a0a0;     /* Cor de texto para legendas, placeholders (cinza médio) */
+  --text-headings: #FFFFFF;      /* Cor para títulos (branco) */
+  --text-link: var(--color-primary); /* Cor para links */
+  --text-inverse: #000000;       /* Cor de texto para usar sobre fundos claros/laranjas */
+
+  /* Cores de Feedback */
+  --color-success: #198754;
+  --color-danger: #dc3545;
+  --color-warning: #ffc107;
+
+  /* Bordas e Sombras */
+  --border-color: #333333;
   --border-radius: 0.375rem;
-  --transition-speed: 0.2s;
-
-  /* Sombras ajustadas para o tema escuro */
   --box-shadow-soft: 0 .125rem .25rem rgba(0,0,0,.5);
-  --box-shadow-focus: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
+  --box-shadow-focus: 0 0 0 0.25rem rgba(255, 165, 0, 0.25);
   --box-shadow-hover: 0 .5rem 1rem rgba(0,0,0,.3);
+
+  /* Transições */
+  --transition-speed: 0.2s;
 }
 
-/* Reset e Configurações Globais */
+/* ==========================================================================
+   2. ESTILOS DE BASE E RESET
+   ========================================================================== */
 html, body {
   height: 100%;
   margin: 0;
@@ -34,8 +46,8 @@ html, body {
 
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: var(--background-color);
-  color: var(--text-color);
+  background-color: var(--surface-background);
+  color: var(--text-primary);
   font-size: 1rem;
   line-height: 1.5;
   display: flex;
@@ -47,7 +59,6 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  flex-grow: 1;
 }
 
 main.container {
@@ -56,73 +67,49 @@ main.container {
   padding-bottom: 2.5rem;
 }
 
-.container { /* Para outros usos de .container se necessário */
-  width: 90%;
-  max-width: 1200px;
-  margin-right: auto;
-  margin-left: auto;
-}
-
-/* Tipografia */
+/* ==========================================================================
+   3. TIPOGRAFIA
+   ========================================================================== */
 h1, h2, h3, h4, h5 {
-  color: var(--heading-color);
+  color: var(--text-headings);
   font-weight: 600;
-  margin-top: 0; /* Remover margem superior padrão dos cabeçalhos */
-  margin-bottom: 0.75rem; /* Espaçamento inferior consistente */
-}
-
-h1.display-5 { /* Título principal da página inicial */
-  color: var(--primary-color);
-  font-weight: 700;
-  text-shadow: none; /* Sem sombra neon em tema claro */
-}
-
-p.lead { /* Parágrafo principal da página inicial */
-    color: var(--text-muted-color);
-    font-size: 1.15rem;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
 }
 
 a {
-  color: var(--primary-color);
-  text-decoration: none; /* Bootstrap já remove para links de navegação, mas pode ser útil */
+  color: var(--text-link);
+  text-decoration: none;
+  transition: color var(--transition-speed);
 }
 a:hover {
-  color: var(--primary-color-darker);
+  color: var(--color-primary-darker);
   text-decoration: underline;
 }
 
-/* Navbar */
-/* Para uma navbar clara, use as classes do Bootstrap: navbar-light bg-light ou navbar-light bg-white */
-/* Se quiser a navbar escura como contraste: */
-nav.navbar.navbar-dark.bg-dark {
-  box-shadow: 0 2px 4px rgba(0,0,0,.1);
-}
-nav.navbar .navbar-brand .me-2 { /* Estilo para o ícone da logo na navbar */
-    border-radius: 50%;
-    padding: 2px;
-    /* background-color: rgba(var(--primary-color-rgb),0.1); -> Pode não ser necessário com logo escura */
-}
+/* ==========================================================================
+   4. COMPONENTES REUTILIZÁVEIS
+   ========================================================================== */
 
-
-/* Header (onde fica o logo grande) */
+/* Navbar e Header */
+.navbar.bg-dark {
+    background-color: var(--surface-2) !important;
+    box-shadow: var(--box-shadow-soft);
+}
 header.text-center.py-4 {
-  background-color: var(--section-background-color); /* Fundo branco */
-  border-bottom: 1px solid var(--border-color); /* Linha sutil abaixo */
-  padding-top: 2rem !important;
-  padding-bottom: 2rem !important;
+    background-color: var(--surface-1);
+    border-bottom: 1px solid var(--border-color);
 }
-
 .logo {
   font-size: 2.2rem;
   font-weight: bold;
-  color: var(--primary-color);
-  text-shadow: none; /* Ou uma sombra muito sutil se desejar */
+  color: var(--color-primary);
 }
 
 /* Cards */
 .card {
-  background-color: var(--section-background-color); /* Fundo branco */
-  color: var(--text-color);
+  background-color: var(--surface-1);
+  color: var(--text-primary);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   margin-bottom: 1.75rem;
@@ -133,21 +120,13 @@ header.text-center.py-4 {
   transform: translateY(-3px);
   box-shadow: var(--box-shadow-hover);
 }
-.card .card-header { /* Estilo para cabeçalho de card, se usar */
-    background-color: #F8F9FA; /* Cinza bem claro */
+.card-header {
+    background-color: var(--surface-2);
     border-bottom: 1px solid var(--border-color);
     font-weight: 600;
 }
-.card .card-body {
-    padding: 1.5rem;
-}
-.card .card-title { /* h5.card-title já herda de h5 */
-  margin-bottom: 0.75rem;
-}
-.card .card-text {
-  color: var(--text-muted-color);
-  font-size: 0.9rem;
-  line-height: 1.5;
+.card-text {
+  color: var(--text-secondary);
 }
 
 /* Botões */
@@ -155,349 +134,221 @@ header.text-center.py-4 {
   padding: 0.65rem 1.5rem;
   border-radius: var(--border-radius);
   font-weight: 600;
-  transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed), transform var(--transition-speed), box-shadow var(--transition-speed);
+  transition: all var(--transition-speed);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: var(--box-shadow-soft);
 }
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,.1);
-}
-.btn:active {
-  transform: translateY(-1px);
+  box-shadow: var(--box-shadow-hover);
 }
 .btn:focus {
     box-shadow: var(--box-shadow-focus);
 }
-
 .btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-    color: #FFFFFF; /* Texto branco no botão laranja primário */
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--text-inverse); /* Garante contraste */
 }
 .btn-primary:hover {
-    background-color: var(--primary-color-darker);
-    border-color: var(--primary-color-darker);
-    color: #FFFFFF;
+    background-color: var(--color-primary-darker);
+    border-color: var(--color-primary-darker);
+    color: var(--text-inverse);
 }
-
-.btn-secondary { /* Exemplo para botão secundário */
-    background-color: var(--text-muted-color);
-    border-color: var(--text-muted-color);
-    color: #FFFFFF;
-}
-.btn-secondary:hover {
-    background-color: #5A6268; /* text-muted-color mais escuro */
-    border-color: #5A6268;
-    color: #FFFFFF;
-}
-
-/* Botões Outline (herdam cores do Bootstrap, mas podemos ajustar se precisar) */
-.btn-outline-primary {
-    color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-.btn-outline-primary:hover {
-    color: #FFFFFF;
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
-}
-/* ... estilos para outros botões outline se necessário ... */
-
-.btn:disabled {
-  background-color: #E9ECEF; /* Cinza claro para desabilitado */
-  border-color: #E9ECEF;
-  color: var(--text-muted-color);
-  opacity: 0.65; /* Opacidade padrão Bootstrap */
+.btn-danger {
+    background-color: var(--color-danger);
+    border-color: var(--color-danger);
+    color: var(--text-headings);
 }
 
 /* Formulários */
 .form-label {
     font-weight: 500;
-    margin-bottom: 0.5rem;
-    color: var(--heading-color); /* Cor de cabeçalho para labels */
+    color: var(--text-headings);
 }
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="date"],
-select,
-textarea {
-  width: 100%;
-  padding: 0.65rem 1rem; /* Padding ligeiramente ajustado */
-  background-color: var(--section-background-color); /* Fundo branco */
-  color: var(--text-color);
+.form-control, .form-select {
+  background-color: var(--surface-2);
+  color: var(--text-primary);
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
-  margin-bottom: 1rem;
   transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-  font-size: 0.95rem;
 }
-input:focus, select:focus, textarea:focus {
+.form-control:focus, .form-select:focus {
   outline: none;
-  border-color: var(--primary-color);
+  border-color: var(--color-primary);
   box-shadow: var(--box-shadow-focus);
+  background-color: var(--surface-2); /* Mantém o fundo no focus */
+  color: var(--text-primary);
 }
-.form-control::placeholder { /* Estilo do placeholder */
-    color: var(--text-muted-color);
-    opacity: 0.7;
+.form-control::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.8;
 }
-
-/* Tabelas (usando classes Bootstrap e customizações leves) */
-table.table {
-  background-color: var(--section-background-color); /* Fundo branco */
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow-soft);
-  margin-top: 2rem;
-  border: 1px solid var(--border-color); /* Borda externa para a tabela inteira */
-}
-table.table th,
-table.table td {
-  padding: 0.9rem 1rem; /* Padding uniforme */
-  vertical-align: middle;
-}
-
-/* Cabeçalho da tabela - usando .table-light do Bootstrap como base ou customizando */
-table.table thead.table-light th {
-  background-color: #E9ECEF; /* Cinza bem claro Bootstrap */
-  color: var(--heading-color);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom-width: 2px;
-  border-color: var(--border-color);
-}
-/* Alternativa: Cabeçalho com a cor primária */
-/* table.table thead th {
-  background-color: var(--primary-color);
-  color: #FFFFFF;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom-width: 0;
-} */
-
-/* Substitua a regra antiga de table.table-striped por esta */
-table.table-striped > tbody > tr:nth-of-type(odd) > * {
-    background-color: rgba(255, 255, 255, 0.04); /* Cor de zebrado muito sutil para fundos escuros */
-}
-
-table.table-hover > tbody > tr:hover > * {
-    background-color: var(--primary-color-transparent); /* Hover laranja sutil */
-    color: var(--text-color);
-}
-
-table.table td {
-  color: var(--text-color);
-  font-size: 0.9rem;
-}
-table.table td a {
-  font-weight: 500;
-}
-
 
 /* Alertas */
-.alert {
-  padding: 1rem 1.25rem;
-  margin-bottom: 1.5rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow-soft);
-}
-/* Cores de alerta padrão do Bootstrap geralmente funcionam bem em tema claro */
-/* Se quiser customizar: */
-/* .alert-primary {
-    color: #004085;
-    background-color: #cce5ff;
-    border-color: #b8daff;
-} */
-.alert-danger {
-    /* usa padrão bootstrap */
-}
 .alert-success {
-    /* usa padrão bootstrap */
+    background-color: var(--color-success);
+    color: var(--text-headings);
+    border-color: var(--color-success);
 }
-
-
-/* Rodapé */
-.site-footer {
-  background-color: #E9ECEF; /* Cinza claro (Bootstrap .bg-light) */
-  color: var(--text-muted-color);
-  padding: 2.5rem 0;
-  border-top: 1px solid var(--border-color);
-  width: 100%;
-  margin-top: auto;
-  flex-shrink: 0;
-}
-.site-footer .footer-text {
-  font-size: 0.85rem;
-  margin-bottom: 0;
-}
-.site-footer .footer-highlight {
-  color: var(--primary-color);
-  font-weight: 600;
-}
-.site-footer .footer-link {
-  color: var(--text-muted-color);
-  text-decoration: none;
-  transition: color var(--transition-speed);
-  margin: 0 0.5rem;
-}
-.site-footer .footer-link:hover {
-  color: var(--primary-color);
-}
-
-
-/* Responsividade */
-@media (max-width: 768px) {
-  body { font-size: 0.95rem; }
-  .container, main.container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
-  }
-
-  .logo { font-size: 1.8rem; }
-  h1.display-5 { font-size: 2rem; }
-  h1 { font-size: 1.7rem; }
-  h2 { font-size: 1.5rem; }
-  h3 { font-size: 1.3rem; }
-
-  .card .card-body { padding: 1.25rem; }
-  .btn { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
-
-  /* Tabela Responsiva com Data Labels */
-  table.table thead {
-    display: none;
-  }
-  table.table,
-  table.table tbody,
-  table.table tr,
-  table.table td {
-    display: block;
-  }
-  table.table tr {
-    background-color: var(--section-background-color); /* Fundo branco para cada "card" de linha */
-    margin-bottom: 1rem;
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
-    padding: 0.75rem;
-    box-shadow: var(--box-shadow-soft);
-  }
-  table.table td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.6rem 0.25rem;
-    text-align: right;
-    border-bottom: 1px dashed #E0E0E0; /* Linha pontilhada mais suave */
-    min-height: 38px;
-  }
-  table.table tr td:last-child {
-    border-bottom: none;
-  }
-  table.table td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: var(--text-muted-color); /* Cor mais suave para o label */
-    text-align: left;
-    padding-right: 10px;
-    flex-basis: 45%; /* Ajuste a largura do label */
-    flex-shrink: 0;
-    white-space: normal; /* Permite quebra de linha */
-  }
-
-  .site-footer { padding: 2rem 1rem; }
-  .site-footer .footer-text { font-size: 0.8rem; }
-}
-/* =================================================================
-   AJUSTES FINOS PARA O TEMA NOTURNO (Melhora de Contraste)
-   Adicione este bloco no FINAL do seu arquivo style.css
-   ================================================================= */
-
-/* Melhora a cor de texto secundário/silenciado para maior contraste */
-.text-muted {
-    color: #a0a0a0 !important; /* Usamos !important para sobrescrever o Bootstrap se necessário */
-}
-
-/* Deixa os placeholders de formulários mais visíveis */
-.form-control::placeholder {
-    color: #888;
-    opacity: 1; /* Remove a transparência para facilitar a leitura */
-}
-
-/* Corrige as cores dos alertas para o tema escuro */
-.alert-success {
-    background-color: #146c43; /* Um verde mais escuro e sóbrio */
-    color: #ffffff;
-    border-color: #198754;
-}
-
 .alert-danger {
-    background-color: #b02a37; /* Um vermelho mais escuro e sóbrio */
-    color: #ffffff;
-    border-color: #dc3545;
+    background-color: var(--color-danger);
+    color: var(--text-headings);
+    border-color: var(--color-danger);
 }
-
-/* Garante que links dentro de alertas sejam brancos e visíveis */
 .alert a {
-    color: #ffffff;
+    color: var(--text-headings);
     font-weight: bold;
     text-decoration: underline;
 }
 
-/* Melhora o contraste do botão secundário */
-.btn-secondary {
-    background-color: #495057;
-    border-color: #495057;
-    color: #FFFFFF;
-}
-.btn-secondary:hover {
-    background-color: #6c757d;
-    border-color: #6c757d;
+/* ==========================================================================
+   5. TABELAS (NOVO ESTILO V2 - MINIMALISTA)
+   ========================================================================== */
+
+.table {
+  background-color: transparent; /* Tabela sem fundo próprio */
+  border: none;
+  margin-top: 2rem;
+  width: 100%;
+  border-collapse: separate; /* Essencial para espaçamento */
+  border-spacing: 0 0.5rem; /* Espaçamento vertical entre as linhas */
 }
 
-/* Garante que o texto dentro dos cards na tela inicial (index.php) seja legível */
-.card .card-text {
-  color: var(--text-color); /* Usa a cor de texto principal do tema */
-  font-size: 0.95rem;
+.table thead {
+  background-color: transparent;
 }
-/* =================================================================
-   POLIMENTO FINAL DO TEMA NOTURNO
-   Adicione este bloco no FINAL do seu arquivo style.css
-   ================================================================= */
 
-/* Ajusta o cabeçalho dos cards para o fundo escuro */
-.card .card-header {
-    background-color: #2a2a2e; /* Um tom ligeiramente diferente para destacar */
+/* Cabeçalho da Tabela */
+.table th {
+  color: var(--text-secondary); /* Cor mais sutil para o cabeçalho */
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 1rem 1.25rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* Linhas do Corpo da Tabela */
+.table tbody tr {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: all var(--transition-speed);
+}
+
+.table tbody tr:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: var(--box-shadow-hover);
+  border-color: var(--color-primary);
+}
+
+/* Células da Tabela */
+.table td {
+  padding: 1rem 1.25rem;
+  vertical-align: middle;
+  border: none; /* SEM BORDAS INTERNAS */
+}
+
+/* Destaque para o primeiro item (Nome) */
+.table tbody td:first-child {
+  color: var(--text-headings);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   6. RESPONSIVIDADE E ESTILO MOBILE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Oculta o cabeçalho tradicional */
+  .table thead {
+    display: none;
+  }
+
+  /* Transforma a tabela em uma lista de "cards" */
+  .table, .table tbody, .table tr, .table td {
+    display: block;
+  }
+
+  .table {
+    box-shadow: none;
+    background-color: transparent;
+    border: none;
+  }
+
+  /* Cada linha vira um card */
+  .table tr {
+    background-color: var(--surface-1);
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    padding: 1rem;
+    box-shadow: var(--box-shadow-soft);
+  }
+
+  /* Cada célula vira um item de lista com label */
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0.25rem;
     border-bottom: 1px solid var(--border-color);
-    color: var(--heading-color);
+    min-height: 42px;
+  }
+
+  .table tr td:last-child {
+    border-bottom: none;
+  }
+
+  /* O "Label" que puxa do atributo data-label */
+  .table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-align: left;
+    padding-right: 1rem;
+  }
 }
 
-/* Deixa o rodapé 100% integrado com o tema noturno */
+
+/* ==========================================================================
+   7. RODAPÉ
+   ========================================================================== */
+
 .site-footer {
-  background-color: #000000; /* Fundo preto para o rodapé */
-  color: var(--text-muted-color);
+  background-color: var(--surface-2);
+  color: var(--text-secondary);
+  padding: 2.5rem 0;
   border-top: 1px solid var(--border-color);
+  width: 100%;
+  margin-top: auto;
+}
+.footer-highlight {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+/* ==========================================================================
+   8. BOTÕES DE AÇÃO (ÍCONES)
+   ========================================================================== */
+.actions-cell {
+    text-align: right; /* Alinha os ícones à direita */
 }
 
-/* Ajusta os botões desabilitados para o tema escuro */
-.btn:disabled {
-  background-color: #333;
-  border-color: #333;
-  color: var(--text-muted-color);
-  opacity: 0.5;
+.action-icon {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    text-decoration: none;
+    margin-left: 1rem;
+    transition: all var(--transition-speed);
 }
 
-/* Remove a cor de fundo clara que ainda existia no cabeçalho de tabelas */
-table.table thead.table-light th {
-    background-color: transparent; /* Remove o fundo claro específico */
+.action-icon:hover {
+    color: var(--color-primary); /* Laranja no hover */
+    transform: scale(1.2);
 }
 
-/* Deixa o fundo do corpo da tabela um pouco mais transparente para diferenciar */
-table.table {
-  background-color: rgba(30, 30, 30, 0.8); /* Fundo do card com transparência */
-  backdrop-filter: blur(5px); /* Efeito de vidro (opcional, mas moderno) */
+.action-icon.action-danger:hover {
+    color: var(--color-danger); /* Vermelho no hover para excluir */
 }

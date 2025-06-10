@@ -87,11 +87,13 @@ include "../includes/header.php";
                     <td data-label="Telefone"><?= htmlspecialchars($f['telefone'] ?? 'N/A') ?></td>
                     <td data-label="E-mail"><?= htmlspecialchars($f['email'] ?? 'N/A') ?></td>
                     <td data-label="Endereço"><?= htmlspecialchars($f['endereco'] ?? 'N/A') ?></td>
-                    <td data-label="Ações">
-                        <?php /* Exemplo de botões de ação
-                        <a href="editar_fornecedor.php?id=<?= $f['id'] ?>" class="btn btn-sm btn-warning">Editar</a>
-                        <a href="../processa_php/excluir_fornecedor.php?id=<?= $f['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Tem certeza que deseja excluir este fornecedor?')">Excluir</a>
-                        */ ?>
+                    <td data-label="Ações" class="actions-cell">
+                        <a href="editar_fornecedor.php?id=<?= $f['id'] ?>" class="action-icon" title="Editar">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <a href="../processa_php/excluir_fornecedor.php?id=<?= $f['id'] ?>" class="action-icon action-danger" title="Excluir" onclick="return confirm('Tem certeza?')">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
