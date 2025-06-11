@@ -165,3 +165,20 @@ header.text-center.py-4 {
     color: var(--text-color);
     font-weight: 600;
 }
+/* ==========================================================================
+   10. AJUSTES FINAIS DE INTERFACE
+   ========================================================================== */
+
+/* Correção de legibilidade para o formulário da página de estoque */
+.form-estoque .form-control {
+    background: rgba(0, 0, 0, 0.4) !important; /* Fundo um pouco mais sólido para contraste */
+}
+
+.form-estoque .form-control::placeholder {
+    color: #bbb !important; /* Texto do placeholder mais claro */
+    opacity: 1;
+}
+
+.form-estoque .btn {
+    font-weight: 700; /* Texto do botão em negrito para facilitar a leitura */
+}

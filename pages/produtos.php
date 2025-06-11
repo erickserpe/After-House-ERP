@@ -1,12 +1,12 @@
 <?php
-session_start();
+session_start(); // ESSENCIAL
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit;
 }
 $id_usuario_logado = $_SESSION['user_id'];
 
-require_once "../includes/db.php";
+require_once "../includes/db.php"; //
 
 // Buscar fornecedores DO USUÁRIO LOGADO para dropdown
 $fornecedores_usuario = [];
@@ -21,15 +21,18 @@ if($stmtF){
     $stmtF->close();
 }
 
+
 // Buscar produtos DO USUÁRIO LOGADO
 $produtos = [];
 $sqlP = "SELECT p.id, p.nome, p.tipo, p.unidade, p.preco_compra, p.fornecedor_id, f.nome as fornecedor_nome 
          FROM produtos p 
-         LEFT JOIN fornecedores f ON p.fornecedor_id = f.id AND f.id_usuario = ?
-         WHERE p.id_usuario = ?
+         LEFT JOIN fornecedores f ON p.fornecedor_id = f.id AND f.id_usuario = ? -- Garante que o join só pegue fornecedores do mesmo usuário
+         WHERE p.id_usuario = ? -- Filtro principal para produtos do usuário
          ORDER BY p.nome ASC";
 $stmtP = $conn->prepare($sqlP);
+
 if($stmtP){
+    // O primeiro 'i' é para f.id_usuario no JOIN, o segundo 'i' é para p.id_usuario no WHERE.
     $stmtP->bind_param("ii", $id_usuario_logado, $id_usuario_logado);
     $stmtP->execute();
     $resultP = $stmtP->get_result();
@@ -48,10 +51,10 @@ include "../includes/header.php";
     <h2>Meus Produtos</h2>
 
     <?php if (isset($_GET['sucesso'])): ?>
-        <div class="alert alert-success">Produto salvo com sucesso!</div>
+        <div class="alert alert-success" role="alert"><?= htmlspecialchars($_GET['sucesso']) ?></div>
     <?php endif; ?>
     <?php if (isset($_GET['erro'])): ?>
-        <div class="alert alert-danger"><?= htmlspecialchars($_GET['erro']) ?></div>
+        <div class="alert alert-danger" role="alert"><?= htmlspecialchars($_GET['erro']) ?></div>
     <?php endif; ?>
 
     <form action="../processa_php/processa_produto.php" method="post" class="row g-3 needs-validation glass-card" novalidate>
@@ -112,7 +115,8 @@ include "../includes/header.php";
                             <td><?= htmlspecialchars($p['unidade']) ?></td>
                             <td>R$ <?= number_format($p['preco_compra'], 2, ',', '.') ?></td>
                             <td>
-                                <?php /* Ações de Editar/Excluir */ ?>
+                                <a href="editar_produto.php?id=<?= $p['id'] ?>" class="action-icon" title="Editar"><i class="bi bi-pencil-fill"></i></a>
+                                <a href="../processa_php/processa_acao.php?acao=excluir&tipo=produto&id=<?= $p['id'] ?>" class="action-icon" title="Excluir" onclick="return confirm('Tem certeza que deseja excluir este produto?')"><i class="bi bi-trash-fill"></i></a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

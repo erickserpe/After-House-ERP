@@ -1,10 +1,9 @@
 <?php
-// Adicionar session_start() aqui pode ser uma opção,
-// mas é geralmente melhor iniciar sessões explicitamente no TOPO
-// de CADA PÁGINA que as utiliza (index.php, login.php, pages/*.php, etc.)
-// ANTES de qualquer saída HTML.
-// Exemplo: if (session_status() == PHP_SESSION_NONE) { session_start(); }
-// Nas suas páginas principais, como index.php, login.php, etc., coloque session_start() no topo.
+// Esta verificação garante que a sessão só seja iniciada se ainda não estiver ativa.
+// Isso resolve o aviso e é a forma mais segura de gerenciar sessões.
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -32,13 +31,31 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link" href="/pages/dashboard.php">Dashboard</a></li> 
-            <li class="nav-item"><a class="nav-link" href="/pages/fornecedores.php">Fornecedores</a></li>
-            <li class="nav-item"><a class="nav-link" href="/pages/produtos.php">Produtos</a></li>
-            <li class="nav-item"><a class="nav-link" href="/pages/receitas.php">Receitas</a></li>
-            <li class="nav-item"><a class="nav-link" href="/pages/simulador.php">Simulador</a></li>
+            <li class="nav-item"><a class="nav-link" href="/pages/eventos.php">Eventos</a></li>
+            <li class="nav-item"><a class="nav-link" href="/pages/estoque.php">Estoque</a></li>
+            
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarCadastrosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Cadastros
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarCadastrosDropdown">
+                    <li><a class="dropdown-item" href="/pages/produtos.php">Produtos</a></li>
+                    <li><a class="dropdown-item" href="/pages/receitas.php">Receitas</a></li>
+                    <li><a class="dropdown-item" href="/pages/fornecedores.php">Fornecedores</a></li>
+                </ul>
+            </li>
+
             <?php if (isset($_SESSION['user_id'])): ?>
-                <li class="nav-item"><a class="nav-link" href="/mudar_senha.php">Mudar Senha</a></li>
-                <li class="nav-item"><a class="nav-link" href="/logout.php">Logout</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i> <?= htmlspecialchars($_SESSION['user_name'] ?? 'Usuário') ?>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarUserDropdown">
+                        <li><a class="dropdown-item" href="/mudar_senha.php">Mudar Senha</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/logout.php">Logout</a></li>
+                    </ul>
+                </li>
             <?php else: ?>
                 <li class="nav-item"><a class="nav-link" href="/login.php">Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="/cadastro.php">Cadastro</a></li>
@@ -53,4 +70,3 @@
     </header>
 
     <main class="container">
-      <?php // O conteúdo principal da página vai aqui. O .site-container e o main NÃO fecham aqui. ?>
