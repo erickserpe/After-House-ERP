@@ -1,354 +1,167 @@
 /* ==========================================================================
-   1. DEFINIÇÕES GLOBAIS E VARIÁVEIS (A BASE DE TUDO)
+   AFTER HOUSE ERP - TEMA "MODERN GLASS"
    ========================================================================== */
+
+/* -------------------------------------------------------------------------- */
+/* 1. FONTES E DEFINIÇÕES GLOBAIS
+/* -------------------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 :root {
-  /* Paleta de Cores Principal (Tema Dark com Laranja) */
-  --color-primary: #FFA500; /* Laranja neon */
-  --color-primary-darker: #E59400;
-  --color-primary-transparent: rgba(255, 165, 0, 0.1);
+  /* Opção: LARANJA NEON */
+  --primary-color: #ffa500;
+  --primary-glow: rgba(255, 165, 0, 0.5);
 
-  /* Cores de Fundo (Superfícies) */
-  --surface-background: #121212; /* Fundo principal, quase preto */
-  --surface-1: #1E1E1E;         /* Superfície para cards, tabelas, etc. */
-  --surface-2: #2a2a2e;         /* Superfície para headers, inputs, etc. */
-  --surface-hover: rgba(255, 255, 255, 0.05); /* Efeito de hover sutil */
+  /* O resto das variáveis continua igual... */
+  --text-color: #f0f0f0;
+  --text-secondary: #a0a0a0;
+  --border-color: rgba(255, 255, 255, 0.2);
+  --shadow-color: rgba(31, 38, 135, 0.37);
 
-  /* Cores de Texto */
-  --text-primary: #E0E0E0;       /* Cor de texto principal (cinza claro) */
-  --text-secondary: #a0a0a0;     /* Cor de texto para legendas, placeholders (cinza médio) */
-  --text-headings: #FFFFFF;      /* Cor para títulos (branco) */
-  --text-link: var(--color-primary); /* Cor para links */
-  --text-inverse: #000000;       /* Cor de texto para usar sobre fundos claros/laranjas */
-
-  /* Cores de Feedback */
-  --color-success: #198754;
-  --color-danger: #dc3545;
-  --color-warning: #ffc107;
-
-  /* Bordas e Sombras */
-  --border-color: #333333;
-  --border-radius: 0.375rem;
-  --box-shadow-soft: 0 .125rem .25rem rgba(0,0,0,.5);
-  --box-shadow-focus: 0 0 0 0.25rem rgba(255, 165, 0, 0.25);
-  --box-shadow-hover: 0 .5rem 1rem rgba(0,0,0,.3);
-
-  /* Transições */
-  --transition-speed: 0.2s;
+  /* Dimensões */
+  --border-radius: 1rem; /* Cantos bem mais arredondados */
 }
-
-/* ==========================================================================
-   2. ESTILOS DE BASE E RESET
-   ========================================================================== */
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
+/* -------------------------------------------------------------------------- */
+/* 2. ESTILO DE BASE E FUNDO
+/* -------------------------------------------------------------------------- */
 body {
   font-family: 'Poppins', sans-serif;
-  background-color: var(--surface-background);
-  color: var(--text-primary);
-  font-size: 1rem;
-  line-height: 1.5;
-  display: flex;
-  flex-direction: column;
+  color: var(--text-color);
+  
+  /* O gradiente de fundo é a chave do design */
+  background: linear-gradient(135deg, #232526, #414345);
+  background-attachment: fixed;
+  
+  min-height: 100vh;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
-/* Estrutura Sticky Footer */
 .site-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+    min-height: 100vh;
 }
 
 main.container {
-  flex: 1 0 auto;
-  padding-top: 2.5rem;
-  padding-bottom: 2.5rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
-/* ==========================================================================
-   3. TIPOGRAFIA
-   ========================================================================== */
-h1, h2, h3, h4, h5 {
-  color: var(--text-headings);
-  font-weight: 600;
-  margin-top: 0;
-  margin-bottom: 0.75rem;
-}
-
-a {
-  color: var(--text-link);
-  text-decoration: none;
-  transition: color var(--transition-speed);
-}
-a:hover {
-  color: var(--color-primary-darker);
-  text-decoration: underline;
-}
-
-/* ==========================================================================
-   4. COMPONENTES REUTILIZÁVEIS
-   ========================================================================== */
-
-/* Navbar e Header */
-.navbar.bg-dark {
-    background-color: var(--surface-2) !important;
-    box-shadow: var(--box-shadow-soft);
-}
+/* Escondendo o header de texto antigo que não será mais usado */
 header.text-center.py-4 {
-    background-color: var(--surface-1);
-    border-bottom: 1px solid var(--border-color);
-}
-.logo {
-  font-size: 2.2rem;
-  font-weight: bold;
-  color: var(--color-primary);
+    display: none !important;
 }
 
-/* Cards */
-.card {
-  background-color: var(--surface-1);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
+/* -------------------------------------------------------------------------- */
+/* 3. O EFEITO "GLASS" - O CORAÇÃO DO DESIGN
+/* -------------------------------------------------------------------------- */
+.glass-card {
+  background: rgba(30, 30, 30, 0.35); /* Fundo semi-transparente escuro */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px); /* Suporte para Safari */
   border-radius: var(--border-radius);
-  margin-bottom: 1.75rem;
-  box-shadow: var(--box-shadow-soft);
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
+  padding: 2rem;
+  margin-bottom: 2rem;
 }
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--box-shadow-hover);
+
+/* -------------------------------------------------------------------------- */
+/* 4. COMPONENTES ESTILIZADOS
+/* -------------------------------------------------------------------------- */
+
+/* Navegação Flutuante */
+.navbar.glass-card {
+  padding: 1rem 2rem;
 }
-.card-header {
-    background-color: var(--surface-2);
-    border-bottom: 1px solid var(--border-color);
+.navbar-brand {
     font-weight: 600;
 }
-.card-text {
-  color: var(--text-secondary);
+.nav-link {
+    color: var(--text-secondary) !important;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.nav-link:hover, .nav-link.active {
+    color: var(--text-color) !important;
+    text-shadow: 0 0 5px var(--primary-glow);
 }
 
-/* Botões */
-.btn {
-  padding: 0.65rem 1.5rem;
-  border-radius: var(--border-radius);
-  font-weight: 600;
-  transition: all var(--transition-speed);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: var(--box-shadow-soft);
-}
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--box-shadow-hover);
-}
-.btn:focus {
-    box-shadow: var(--box-shadow-focus);
-}
-.btn-primary {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--text-inverse); /* Garante contraste */
-}
-.btn-primary:hover {
-    background-color: var(--color-primary-darker);
-    border-color: var(--color-primary-darker);
-    color: var(--text-inverse);
-}
-.btn-danger {
-    background-color: var(--color-danger);
-    border-color: var(--color-danger);
-    color: var(--text-headings);
+/* Estilo para Títulos dentro dos cards */
+.glass-card h2, .glass-card h3, .glass-card h4 {
+    color: var(--text-color);
+    font-weight: 600;
+    margin-top: 0; /* Remove margem do topo para alinhar bem dentro do card */
 }
 
 /* Formulários */
 .form-label {
+    color: var(--text-secondary);
     font-weight: 500;
-    color: var(--text-headings);
+    margin-bottom: 0.5rem;
 }
 .form-control, .form-select {
-  background-color: var(--surface-2);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
 }
 .form-control:focus, .form-select:focus {
-  outline: none;
-  border-color: var(--color-primary);
-  box-shadow: var(--box-shadow-focus);
-  background-color: var(--surface-2); /* Mantém o fundo no focus */
-  color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 10px var(--primary-glow);
+    border-color: var(--primary-color);
+    color: var(--text-color);
 }
 .form-control::placeholder {
     color: var(--text-secondary);
-    opacity: 0.8;
 }
 
-/* Alertas */
-.alert-success {
-    background-color: var(--color-success);
-    color: var(--text-headings);
-    border-color: var(--color-success);
-}
-.alert-danger {
-    background-color: var(--color-danger);
-    color: var(--text-headings);
-    border-color: var(--color-danger);
-}
-.alert a {
-    color: var(--text-headings);
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-/* ==========================================================================
-   5. TABELAS (NOVO ESTILO V2 - MINIMALISTA)
-   ========================================================================== */
-
-.table {
-  background-color: transparent; /* Tabela sem fundo próprio */
-  border: none;
-  margin-top: 2rem;
-  width: 100%;
-  border-collapse: separate; /* Essencial para espaçamento */
-  border-spacing: 0 0.5rem; /* Espaçamento vertical entre as linhas */
-}
-
-.table thead {
-  background-color: transparent;
-}
-
-/* Cabeçalho da Tabela */
-.table th {
-  color: var(--text-secondary); /* Cor mais sutil para o cabeçalho */
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  padding: 1rem 1.25rem;
-  border-bottom: 2px solid var(--border-color);
-}
-
-/* Linhas do Corpo da Tabela */
-.table tbody tr {
-  background-color: var(--surface-1);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  transition: all var(--transition-speed);
-}
-
-.table tbody tr:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: var(--box-shadow-hover);
-  border-color: var(--color-primary);
-}
-
-/* Células da Tabela */
-.table td {
-  padding: 1rem 1.25rem;
-  vertical-align: middle;
-  border: none; /* SEM BORDAS INTERNAS */
-}
-
-/* Destaque para o primeiro item (Nome) */
-.table tbody td:first-child {
-  color: var(--text-headings);
-  font-weight: 500;
-}
-
-/* ==========================================================================
-   6. RESPONSIVIDADE E ESTILO MOBILE
-   ========================================================================== */
-
-@media (max-width: 768px) {
-  /* Oculta o cabeçalho tradicional */
-  .table thead {
-    display: none;
-  }
-
-  /* Transforma a tabela em uma lista de "cards" */
-  .table, .table tbody, .table tr, .table td {
-    display: block;
-  }
-
-  .table {
-    box-shadow: none;
-    background-color: transparent;
+/* Botões com Efeito Neon */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #000;
+    font-weight: 700;
     border: none;
-  }
-
-  /* Cada linha vira um card */
-  .table tr {
-    background-color: var(--surface-1);
-    margin-bottom: 1rem;
-    border-radius: var(--border-radius);
-    border: 1px solid var(--border-color);
-    padding: 1rem;
-    box-shadow: var(--box-shadow-soft);
-  }
-
-  /* Cada célula vira um item de lista com label */
-  .table td {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem 0.25rem;
-    border-bottom: 1px solid var(--border-color);
-    min-height: 42px;
-  }
-
-  .table tr td:last-child {
-    border-bottom: none;
-  }
-
-  /* O "Label" que puxa do atributo data-label */
-  .table td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: var(--text-secondary);
-    text-align: left;
-    padding-right: 1rem;
-  }
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 5px var(--primary-color), 0 0 15px var(--primary-glow);
+}
+.btn-primary:hover {
+    box-shadow: 0 0 10px var(--primary-color), 0 0 30px var(--primary-glow);
+    transform: scale(1.05);
 }
 
+/* Tabelas */
+.table {
+    background: transparent;
+    color: var(--text-color);
+    border: none; /* Remove bordas padrão da tabela */
+}
+.table th {
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-weight: 500;
+    border-bottom: 2px solid var(--border-color);
+}
+.table td {
+    border-color: var(--border-color);
+}
+/* Remove a cor de fundo listrada padrão do bootstrap */
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: transparent;
+}
 
-/* ==========================================================================
-   7. RODAPÉ
-   ========================================================================== */
-
+/* Rodapé */
 .site-footer {
-  background-color: var(--surface-2);
-  color: var(--text-secondary);
-  padding: 2.5rem 0;
-  border-top: 1px solid var(--border-color);
-  width: 100%;
-  margin-top: auto;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 2rem 0;
+    text-align: center;
+    margin-top: auto;
 }
 .footer-highlight {
-  color: var(--color-primary);
-  font-weight: 600;
-}
-/* ==========================================================================
-   8. BOTÕES DE AÇÃO (ÍCONES)
-   ========================================================================== */
-.actions-cell {
-    text-align: right; /* Alinha os ícones à direita */
-}
-
-.action-icon {
-    color: var(--text-secondary);
-    font-size: 1.2rem;
-    text-decoration: none;
-    margin-left: 1rem;
-    transition: all var(--transition-speed);
-}
-
-.action-icon:hover {
-    color: var(--color-primary); /* Laranja no hover */
-    transform: scale(1.2);
-}
-
-.action-icon.action-danger:hover {
-    color: var(--color-danger); /* Vermelho no hover para excluir */
+    color: var(--text-color);
+    font-weight: 600;
 }

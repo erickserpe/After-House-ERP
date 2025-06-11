@@ -1,23 +1,13 @@
-<?php
-// cadastro.php
-// Se precisar de sessão, inicie-a.
-// session_start();
-
-// Se o usuário já estiver logado, redirecione para a página inicial, por exemplo.
-// if (isset($_SESSION['user_id'])) {
-//     header("Location: index.php");
-//     exit;
-// }
-
-include 'includes/header.php'; // Se cadastro.php está na raiz
-?>
-<div class="container">
-  <h2 class="mb-4">Cadastrar Novo Usuário</h2>
+<?php include 'includes/header.php'; ?>
+<div class="container glass-card" style="max-width: 500px;">
+  <h2 class="text-center">Cadastrar Novo Usuário</h2>
+  <p class="text-center text-secondary mb-4">Crie sua conta gratuitamente</p>
+  
   <?php if (isset($_GET['erro'])): ?>
     <div class="alert alert-danger"><?= htmlspecialchars($_GET['erro']) ?></div>
   <?php endif; ?>
   <?php if (isset($_GET['sucesso'])): ?>
-    <div class="alert alert-success">Cadastro realizado com sucesso! Você já pode fazer o <a href="login.php">login</a>.</div>
+    <div class="alert alert-success">Cadastro realizado com sucesso! Você já pode fazer o <a href="login.php" class="fw-bold">login</a>.</div>
   <?php endif; ?>
 
   <form action="processa_php/processa_usuario.php" method="POST">
@@ -33,7 +23,9 @@ include 'includes/header.php'; // Se cadastro.php está na raiz
       <label for="senha" class="form-label">Senha</label>
       <input type="password" class="form-control" id="senha" name="senha" required minlength="6">
     </div>
-    <button type="submit" class="btn btn-primary">Cadastrar</button>
+    <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Cadastrar</button>
+    </div>
   </form>
 </div>
-<?php include 'includes/footer.php'; // Se cadastro.php está na raiz ?>
+<?php include 'includes/footer.php'; ?>

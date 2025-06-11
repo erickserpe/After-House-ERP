@@ -58,43 +58,35 @@ $data_fornecedor = json_encode(array_column($dados_grafico_fornecedor, 'total_pr
 include "../includes/header.php";
 ?>
 
-<div class="container mt-4">
+<div class="container">
     <h2 class="mb-4">Dashboard</h2>
 
     <div class="row">
         <div class="col-md-4">
-            <div class="card shadow-sm text-center mb-3">
-                <div class="card-body">
-                    <h5 class="card-title text-muted">Total de Produtos</h5>
-                    <p class="display-4" style="color: var(--primary-color);"><?= $total_produtos ?></p>
-                </div>
+            <div class="text-center glass-card">
+                <h5 class="card-title text-muted">Total de Produtos</h5>
+                <p class="display-4" style="color: var(--primary-color);"><?= $total_produtos ?></p>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card shadow-sm text-center mb-3">
-                <div class="card-body">
-                    <h5 class="card-title text-muted">Total de Fornecedores</h5>
-                    <p class="display-4" style="color: var(--primary-color);"><?= $total_fornecedores ?></p>
-                </div>
+            <div class="text-center glass-card">
+                <h5 class="card-title text-muted">Total de Fornecedores</h5>
+                <p class="display-4" style="color: var(--primary-color);"><?= $total_fornecedores ?></p>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card shadow-sm text-center mb-3">
-                <div class="card-body">
-                    <h5 class="card-title text-muted">Total de Receitas</h5>
-                    <p class="display-4" style="color: var(--primary-color);"><?= $total_receitas ?></p>
-                </div>
+            <div class="text-center glass-card">
+                <h5 class="card-title text-muted">Total de Receitas</h5>
+                <p class="display-4" style="color: var(--primary-color);"><?= $total_receitas ?></p>
             </div>
         </div>
     </div>
 
     <div class="row mt-4">
-        <div class="col-md-8 offset-md-2">
-            <div class="card shadow-sm">
-                <div class="card-header">
-                    Produtos por Fornecedor
-                </div>
-                <div class="card-body">
+        <div class="col-md-10 offset-md-1">
+            <div class="glass-card">
+                <h4 class="mb-4">Produtos por Fornecedor</h4>
+                <div>
                     <canvas id="graficoFornecedores"></canvas>
                 </div>
             </div>
@@ -103,30 +95,33 @@ include "../includes/header.php";
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Configuração do Gráfico de Fornecedores
     const ctxFornecedores = document.getElementById('graficoFornecedores');
     if (ctxFornecedores) {
         new Chart(ctxFornecedores, {
-            type: 'doughnut', // Mudei para 'doughnut' para um visual mais moderno
+            type: 'doughnut', 
             data: {
                 labels: <?php echo $labels_fornecedor; ?>,
                 datasets: [{
                     label: 'Nº de Produtos',
                     data: <?php echo $data_fornecedor; ?>,
-                    // PALETA DE CORES NOVA, USANDO TONS DE LARANJA E CINZA
-                    backgroundColor: [
-                        'rgba(255, 165, 0, 0.9)', // Laranja Principal
-                        'rgba(255, 165, 0, 0.7)',
-                        'rgba(255, 165, 0, 0.5)',
-                        'rgba(108, 117, 125, 0.7)', // Cinza
-                        'rgba(108, 117, 125, 0.5)',
-                        'rgba(108, 117, 125, 0.3)'
+                    
+                    // --- CORES ATUALIZADAS PARA LARANJA NEON ---
+                    // Para mudar para outra cor (ex: Rosa), altere os valores RGBA aqui.
+                    // Rosa: 240, 44, 142
+                    // Azul: 0, 209, 255
+                    backgroundColor: [ 
+                        'rgba(255, 165, 0, 0.8)', // Laranja Neon
+                        'rgba(255, 165, 0, 0.6)',
+                        'rgba(255, 165, 0, 0.4)',
+                        'rgba(255, 255, 255, 0.3)', // Cores neutras para o resto
+                        'rgba(255, 255, 255, 0.2)',
+                        'rgba(255, 255, 255, 0.1)'
                     ],
-                    borderColor: '#FFFFFF', // Borda branca para separar as fatias
-                    borderWidth: 3
+                    borderColor: 'rgba(255, 165, 0, 1)', // Borda Laranja Neon
+                    borderWidth: 2
                 }]
             },
             options: {
@@ -134,6 +129,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 plugins: {
                     legend: {
                         position: 'top',
+                        labels: {
+                            // Cor da legenda atualizada para combinar com o tema
+                            color: '#f0f0f0' 
+                        }
                     }
                 }
             }
