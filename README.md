@@ -1,17 +1,12 @@
 # After House ERP 🍹
 
-**Sistema inteligente de gestão de open bar para eventos, com um design moderno e futurista.**
-
-![After House Dashboard](https://i.imgur.com/uGZkG2k.png) 
-*(Sugestão: Substitua o link acima por uma captura de tela do seu sistema com o novo design)*
-
----
+**Sistema inteligente de gestão de open bar para eventos, com um design moderno.**
 
 ## 📋 Sobre o Projeto
 
 O **After House** é um sistema de ERP (Enterprise Resource Planning) focado em simplificar a gestão de bares para eventos. Ele foi desenvolvido para ajudar organizadores e donos de bares a controlar insumos, calcular custos, criar receitas e simular o consumo de eventos de forma eficiente, garantindo o controle financeiro e a otimização de compras.
 
-O projeto foi totalmente redesenhado com uma interface "Modern Glass" para proporcionar uma experiência de usuário única, agradável e futurista.
+O projeto foi totalmente redesenhado com uma interface "Modern Glass" para proporcionar uma experiência de usuário única, agradável.
 
 ---
 
@@ -50,27 +45,17 @@ Siga os passos abaixo para rodar o projeto em um ambiente de desenvolvimento loc
 
 * Um servidor web local (XAMPP, WAMP, MAMP, ou similar) que rode **Apache**, **PHP** e **MySQL**.
 * Um cliente de banco de dados (phpMyAdmin, DBeaver, etc.).
-* [Git](https://git-scm.com/downloads) instalado na sua máquina.
 
 ### Guia de Instalação
 
-1.  **Clone o repositório:**
-    ```bash
-    git clone [https://github.com/seu-nome-de-usuario/after-house-erp.git](https://github.com/seu-nome-de-usuario/after-house-erp.git)
-    ```
-    *(Substitua pela URL do seu repositório)*
-
-2.  **Mova o projeto para a pasta do seu servidor web:**
-    * Mova a pasta clonada para o diretório `htdocs` (no XAMPP) ou `www` (no WAMP/MAMP).
-
-3.  **Configure o Banco de Dados:**
+1.  **Configure o Banco de Dados:**
     * Abra seu cliente de banco de dados (ex: phpMyAdmin, acessível por `http://localhost/phpmyadmin`).
     * Crie um novo banco de dados chamado `after_house`.
     * Selecione o banco de dados recém-criado e vá para a aba "Importar".
     * Clique em "Escolher arquivo" e selecione o arquivo `database.sql` que está na raiz do projeto.
     * Execute a importação. Isso criará todas as tabelas e adicionará um usuário administrador padrão.
 
-4.  **Configure a Conexão com o Banco de Dados:**
+2.  **Configure a Conexão com o Banco de Dados:**
     * Abra o arquivo `includes/db.php` no seu editor de código.
     * Altere as variáveis de conexão (`$host`, `$user`, `$password`, `$dbname`) para corresponder às configurações do seu ambiente MySQL local.
         ```php
@@ -83,14 +68,9 @@ Siga os passos abaixo para rodar o projeto em um ambiente de desenvolvimento loc
         // ... resto do código
         ```
 
-5.  **Acesse o Sistema:**
+3.  **Acesse o Sistema:**
     * Abra seu navegador e acesse `http://localhost/nome-da-pasta-do-projeto`.
     * Você pode usar as credenciais do usuário administrador para o primeiro acesso:
         * **Email:** `admin@afterhouse.com`
         * **Senha:** `admin123`
 
----
-
-## 🏛️ Estrutura de Arquivos
-
-A estrutura do projeto está organizada da seguinte forma:
